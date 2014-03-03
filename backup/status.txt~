@@ -1,8 +1,0 @@
-STAT  IN_STATE  JOB                                               
-Run      05:37  blackdiamond-0                                    
-Summary: 1 Condor job total (R:1)
-
-UNRDY READY   PRE  IN_Q  POST  DONE  FAIL %DONE STATE   DAGNAME                                 
-    0     0     0     0     0    23     0 100.0 Success *blackdiamond-0.dag                     
-
-dsjdjs

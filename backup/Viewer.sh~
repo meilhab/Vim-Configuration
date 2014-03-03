@@ -1,8 +1,0 @@
-#!/bin/sh
-
-cat > portView.txt << EOF
-viewer.bin=VisIVO1/Viewer
-input2=VisIVO1/Viewer/2
-EOF
-
-exit 0

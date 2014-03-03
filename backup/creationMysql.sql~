@@ -1,5 +1,0 @@
-create database if not exists yuukou_db;
-
---create user 'yuukou_user'@'localhost' identified by 'Yuukou_2';
-
-grant all privileges on yuukou_db.* to 'yuukou_user'@'localhost';

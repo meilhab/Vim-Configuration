@@ -1,8 +1,0 @@
-#!/bin/sh
-
-cat > portStat.txt << EOF
-statistic.bin=VisIVO1/Statistic
-input4=VisIVO1/Statistic/4
-EOF
-
-exit 0
