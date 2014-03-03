@@ -1,0 +1,10 @@
+#!/bin/sh
+cat > portImport.txt << EOF
+importer.bin=VisIVO1/Importer
+input0=VisIVO1/Importer/0
+input1=VisIVO1/Importer/1
+EOF
+
+zip importer.zip importer.bin input*
+
+exit 0

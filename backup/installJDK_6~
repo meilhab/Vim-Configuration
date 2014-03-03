@@ -1,0 +1,9 @@
+update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.6.0_37/bin/java" 1
+update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.6.0_37/bin/javac" 1
+update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/jdk1.6.0_37/bin/javaws" 1
+update-alternatives --install "/usr/bin/javadoc" "javadoc" "/usr/lib/jvm/jdk1.6.0_37/bin/javadoc" 1
+
+update-alternatives --set "java" "/usr/lib/jvm/jdk1.6.0_37/bin/java"
+update-alternatives --set "javac" "/usr/lib/jvm/jdk1.6.0_37/bin/javac"
+update-alternatives --set "javaws" "/usr/lib/jvm/jdk1.6.0_37/bin/javaws"
+update-alternatives --set "javadoc" "/usr/lib/jvm/jdk1.6.0_37/bin/javadoc"

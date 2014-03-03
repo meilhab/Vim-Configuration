@@ -1,0 +1,51 @@
+#!/bin/bash
+
+while read line ; do
+    set $line
+	if [ "$4" = "pegasus-status" ]; then
+		shift 3
+		COMMAND_LINE=$@
+		break
+	fi
+done < info.txt
+echo "$COMMAND_LINE"
+echo
+
+
+STATE=false
+line=""
+while read line ; do
+	echo "avant $line"
+	set $line
+	echo "apres"
+
+	echo "debut si1"
+	if $STATE ; then
+		case $9 in
+			"Running")
+				STATUS="Running"
+			;;
+			"Success")
+				STATUS="Success"
+			;;
+			"Failed")
+				STATUS="Failed"
+			;;
+			*)
+				STATUS="Not Defined"
+			;;
+		esac
+		break
+	fi
+	echo "fin si1"
+
+	echo "debut si2"
+	if [ "$9" = "STATE" ]; then
+		STATE=true
+	fi
+	echo "fin si2"
+done < status.txt
+
+echo
+echo "$STATUS"
+echo

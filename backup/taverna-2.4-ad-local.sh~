@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "Taverna 2.4 pre-installed workflow engine ver (10)"
+echo "Running on: "`hostname -f`
+export ENGINE_REPO=/home/benoit/Documents/taverna/tests
+echo running $ENGINE_REPO/auto-deploy-taverna/taverna-2.4.0-plugin/wfsubmit.sh $*
+$ENGINE_REPO/auto-deploy-taverna/taverna-2.4.0/wfsubmit.sh $*
+echo "Execution finished"
+exit

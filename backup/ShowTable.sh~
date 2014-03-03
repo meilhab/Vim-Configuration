@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cat > portShow.txt << EOF
+showTable.bin=VisIVO1/ShowTable
+input3=VisIVO1/ShowTable/3
+EOF
+
+exit 0

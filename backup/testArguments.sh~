@@ -1,0 +1,26 @@
+#!/bin/bash
+
+while getopts i:a:b: opt
+do
+	case $opt in
+		i)
+			echo "i detected: " $OPTARG
+			workflow=$OPTARG
+		;;
+		a)
+			echo "a detected: " $OPTARG
+		;;
+		b)
+			echo "b detected: " $OPTARG
+		;;
+		?)
+			echo "error"
+			exit 1
+		;;
+	esac
+
+done
+
+
+echo $workflow
+

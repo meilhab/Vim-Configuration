@@ -1,0 +1,8 @@
+#!/bin/sh
+cat > portGnu.txt << EOF
+gnuplot.bin=VisIVO1/GnuPlot
+EOF
+
+zip gnuplot.zip gnuplot.zip portGnu.txt
+
+exit 0

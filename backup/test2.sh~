@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ -f "$1" ]; then
+	touch tata1.txt
+	touch tata2.txt
+	exit 0
+fi
+
+exit 1

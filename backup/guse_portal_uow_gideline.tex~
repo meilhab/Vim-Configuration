@@ -1,0 +1,742 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LaTeX Template
+%
+% Original author:
+% Dario Ferrer (http://bifi.es/~dario/)
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{sectsty} % Allows customizing section commands
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\usepackage{enumerate}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+\usepackage{rotating}
+%\numberwithin{equation*}{section} % Number equation*s within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+%\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+%the following defines the sql syntax highlighting
+\lstdefinestyle{sqlhigh}{
+ belowcaptionskip=1\baselineskip,
+ breaklines=true,
+ xleftmargin=\parindent,
+ language=SQL,
+ showstringspaces=false,
+ basicstyle=\scriptsize\ttfamily,
+ keywordstyle=\bfseries\color{black!40!black},
+ commentstyle=\color{purple!40!black},
+ identifierstyle=\color{blue},
+ stringstyle=\color{orange},
+ }
+%The following changes the section and subsection numbering/lettering
+\renewcommand{\thesection}{\alph{section}}
+\renewcommand{\thesubsubsection}{\alph{subsubsection}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{University of Westminster, School of Electronics and Computing Science} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Guse WS-Pgrade portal Guideline \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Dar\'{i}o Ferrer} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+\maketitle % Print the title
+
+\newpage
+\section{About this document}
+This guideline are intended to be extra material to adapt the Guse WS-Pgrade installation, upgrade and administration manuals to the University of Westminster environment, so first, please, download and read the SZTAKI produced documentation from the SF page: \url{http://sourceforge.net/projects/guse/files}
+
+However, this document can help any system administrator to better understand the portal behaviour and internal settings.
+
+Please, read the whole document before starting any installation.
+\section{Pre-Installation}
+If we want to support submission services to Glite environments we have to install the UMD2 middleware in the node, this is only well supported and documented under Scientific Linux 6, so the first step is install a SL6 node on the cloud, in the case of the UoW, there is a SL6 image with all the UMD2 middleware preloaded, this gets the installation much easier, but the installation documentation should be revised in order to understand how Glite works from the system point of view and of course in order to perform middleware updates if neccesary. The official documentation is here: \url{http://repository.egi.eu/category/umd_releases/distribution/umd-2/}. The configuration has to be performed according to the version of the Scientific Linux you are using.
+
+Once everything is configured we have to install the EMI-UI with the following command:
+\scriptsize
+\begin{verbatim}
+yum install emi-ui
+\end{verbatim}
+\normalsize
+
+Once installed, if we want to test it, we have to configure the UI with the \textit{yaim} command. In order to do that we need to have proper Glite configuration files for each VO, then launch a yaim command for each configuration file.
+
+Here are the configuration files already loaded in the current production server: \url{http://docs.ecs.westminster.ac.uk/lib/exe/fetch.php?media=guse:glite.zip}, they have to be located on the \textit{/root/glite} directory and the command to configure them is:
+\scriptsize
+\begin{verbatim}
+for i in /root/glite/site-info.def.*; do /opt/glite/yaim/bin/yaim -c -s $i -n glite-UI; done;
+\end{verbatim}
+\normalsize
+
+Once done, if no errors, you should be able to submit jobs to the VOs defined in the previous config files, you'll need a certificate registered in the VOs you want to submit to and a proper JDL file for the aplication you want to submit. For example, if you want to sumbit \textit{DSP}, you can download the executable and default testing input files from the EDGI AR: \url{http://edgi-repo.cpc.wmin.ac.uk/repository/} and then submit it using the following commands:
+\scriptsize
+\begin{verbatim}
+voms-proxy-init -cert .globus/usercert.pem -key .globus/userkey.pem --voms vlemed
+glite-wms-job-submit -a dsp.jdl
+\end{verbatim}
+\normalsize
+The first command generates a proxy (temporary) certificate in which ``vlemed'' is the name of the VO we are submitting to.
+The second command, actually submit the job, the jdl file pointed in the command contains:
+\scriptsize
+\begin{verbatim}
+[ Type = ``job'';
+JobType = ``normal'';
+Executable = ``dsp'';
+Arguments = ``-f 22 -i 22 -p 723 -n pools.txt'';
+StdOutput = ``;
+StdError = ''``;
+OutputSandbox = { ''cost.txt`` };
+InputSandbox = { ''gsiftp://edgi-repo.cpc.wmin.ac.uk:2811/srv/edgi/1001/1102/dsp``, ''pools.txt``};
+]''<++>
+\end{verbatim}
+\normalsize
+We can verify that the submission works with the following command:
+\scriptsize
+\begin{verbatim}
+glite-wms-job-status https://wms1.grid.sara.nl:9000/MKqJSFWi-sp2T_jJcAFhyg
+\end{verbatim}
+\normalsize
+In which the URL is the job id provided by the submission command.
+
+It is a good idea to do all this process under a different than root and guse user.
+
+The user x509 certificates must be located in the \textit{~/.globus} directory in .pem format, there must be both, the user key and the user certificate.
+
+It's quite important also that the server is properly synchronized using ntp servers. Apart from the proper firewall rule to allow it, we configure it at UoW by adding the following server to \textit{/etc/ntp.conf}
+\scriptsize
+\begin{verbatim}
+server 161.74.14.112
+\end{verbatim}
+\normalsize
+Which is the internal ntp server for the university.
+
+The last configuration is to change the Scientific Linux distribution configuration file to a permissive one in case of any modification you would provide (such as changing the directory of mysql).
+Edit the file located to \textbf{/etc/selinux/config} and change \textbf{SELINUX=enforcing} to \textbf{SELINUX=permissive}, then reboot.
+Make sure of the change by executing the following command:
+\scriptsize
+\begin{verbatim}
+cat /selinux/enforce
+\end{verbatim}
+\normalsize
+The result should be 0.
+
+
+\section{Installation}
+
+First thing to do is install or upgrade the portal following the official manuals. This is a straightforward process, specially the installation through the wizard installer, which is the official default installation manner.
+
+The wizard installer has two options, local and distributed installation, as we have powerful machines at the cloud we use to install everything in one machine, so local installation. The difference between local and distributed is that in case of a distributed one it will install two different tomcat environments in two machines, one with the liferay and one with the guse portal itself, the databases can be also distributed (one for liferay one for guse). If we have plenty of ram, like 4 gigs or more, you can do the whole installation in one node simplifying the process and the final environment.
+
+Once the installation have been done following the wizard installer manual, we have got a partial functional portal only able to submit workflows locally, and only if we enable it in the DCI bridge. All the rest of the services must be configured carefully.
+
+During the installation wizard process, it ask if the environment is going to be based on ip or in hostname, the portal is going to be configured according to the values we put in here, for basic functionality you can put either ``127.0.0.1`` or ``localhost`` and it will work, but for more complex environments it has to be modified further on in the internal services setting (it will be threated later on). The recomendation is to set here the proper full hostname (with the domainname) that the portal has. Such hostname \textbf{must} be included in the \textit{/etc/hosts} file in the server, and the public ip of such hostname \textbf{must} be configured in the machine. In special cases like UoW one, the portal lives in a natted environment, so the external/public ip is actually living out of the portal node, in a external firewall and all the input output traffic is natted from the internal to the public ip and vice versa. This is not ok for the portal, some services need to reach the public ip to work, so the workaround, is to configure a virtual interface in the node with the public ip on it. Furthermore, some virtualised environments try to force the machine to restrict the networking interfaces to those created by the hypervisor only, so it destroys the virtual interface, one solution is just add in the crontab a command that sets up the interface again.
+
+The configuration file for the virtual interface in Scientific Linux is located in \textit{cat /etc/sysconfig/network-scripts/ifcfg-eth0:1} and it should look like:
+\scriptsize
+\begin{verbatim}
+DEVICE=eth0:1
+BOOTPROTO=none
+HWADDR=fa:16:3e:37:78:62
+NETMASK=255.255.255.255
+IPV6INIT=yes
+NM_CONTROLLED=no
+TYPE=Ethernet
+IPADDR=161.74.11.130
+ONBOOT=no
+IPV6INIT=no
+USERCTL=no
+\end{verbatim}
+\normalsize
+The crontab command can be set up by typing \textit{crontab -e}, and editor will be open and we have to introduce the following in a new line:
+\scriptsize
+\begin{verbatim}
+*/1 * * * * /sbin/ifup eth0:1
+\end{verbatim}
+\normalsize
+This just brings up the interface each minute if it's down. Is not an elegant solution, but it does the job.
+If this interface is down, some of the services will not work in a very confusing manner (the experience says is hard to identify), so, it is a good practice to check if this virtual interface is working whenever there is a problem prior to anything else.
+
+What the wizard does is to download from SourceForge the ``tomcat'' application server, the ``Liferay'' java based CMS, and the Guse portal, it puts all these things together under the \textit{~/guse} directory by default, and loads the guse database, the liferay database is loaded by liferay itself the first time we launch the tomcat. If there is any networking problem and any package fails to download the installation will fail, it can fail quietly, so we don't know where has failed, have a look at the log is the best thing to do, some errors are not recognised as errors by the wizard so be alert!.
+
+In the latest versions of the wizard manual is is quite well described the number of dependencies that it needs, however, experience says that having an eye in the log is the best practice as sometimes an executable could be missing or a java path could be not properly configured.
+
+\section{Configuration}
+\label{sec:Configuration}
+Once the installation has finished, the wizard creates a file called \textit{~/.guserc} that is actually pointed in \textit{~.bashrc}, so is loaded when login with the guse user, is important to make it load each time we become guse user from root by typing ``su - guse'', the dash make user to load the environment file.
+
+In this file, the java and other important variables for the portal are set. We have to modify it in order to fit in our memory environment and most important in order to fit in our ``globus'' cluster port range, and the firewall must allow it.
+
+It is also the place to set the correct time zone for the portal, it is crucial that is well configured, otherwise some services will fail, such as GT4 or Glite.
+\scriptsize
+\begin{verbatim}
+export GUSE_PREFIX=``/srv/guse/guse''
+	export JAVA_OPTS=``-server -Xms256m -Xmx1024m -XX:MaxPermSize=512m -Dfile.encoding=UTF8 \
+	-Duser.timezone=Europe/London -Djava.security.auth.login.config=/srv/guse/guse/apache-tomcat-6.0.36/conf/jaas.config''
+	export X509_USER_PROXY=x509up
+	export CATALINA_OPTS=``-DcrlUpdateInterval=0s -DcrlEnabled=false -Dorg.globus.tcp.port.range=3000,3600''
+	export GUSE_BACKEND_HOST=127.0.0.1
+	export GUSE_FRONTEND_HOST=127.0.0.1
+	export GUSE_MYSQL_SERVER=localhost:3306
+	export IS_GUSE_BACKEND=true
+	export IS_GUSE_FRONTEND=true]
+\end{verbatim}
+\normalsize
+
+\subsection{Internal services}
+The internal services must be modified in order to properly work with the https approach, as the portal is been designed to work in plain http protocol in the port 8080, the best practice is to leave all the URLs related to only actual internal services of the portal in the port 8080. Other services, are used by a java applet to create the concretes and others are used by external services to communicate to the portal.
+
+Apart from the configuration here, is very important to configure CAREFULLY the ``pound'' proxy server to listen in the proper ip for each specific service, please see the ``Pound'' configuration section ~\ref{sec:Pound}.
+
+In the next chart we can see the current ``internal services'' configuration, we can use it as reference to figure out how to do in a new deployment. Of course, it must be adapted to the proper hostname of the new deployment host.
+\begin{table}[H]
+\footnotesize
+	\begin{center}
+		\begin{tabular}{ll}
+Internal URL of Component &public URL of Component\\
+\hline
+\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/wspgrade &https://shiwa-portal2.cpc.wmin.ac.uk/wspgrade\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/wfi &https://shiwa-portal2.cpc.wmin.ac.uk/wfi\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/wfs &https://shiwa-portal2.cpc.wmin.ac.uk/wfs\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/information &NA\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/storage &https://shiwa-portal2.cpc.wmin.ac.uk/storage\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/repository &NA\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/information &NA\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/dci\_bridge\_service  &https://shiwa-portal2.cpc.wmin.ac.uk/dci\_bridge\_service\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/dci\_bridge\_service &https://shiwa-portal2.cpc.wmin.ac.uk/dci\_bridge\_service\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/stataggregator &NA\\
+http://shiwa-portal2.cpc.wmin.ac.uk:8080/statvisualizer &https://shiwa-portal2.cpc.wmin.ac.uk/statvisualizer\\
+http://127.0.0.1:6080/gemlcaquery &NA
+		\end{tabular}
+	\end{center}
+\normalsize
+\end{table}
+The last line is only required if a separated tomcat for GEMLCA is running in the port 6080, so if GEMLCA submission service is installed, this line must exist, however, that's already explained in the GEMLCA manual.
+\subsection{DCI Bridge}
+The DCI bridge configuration can be tricky and must be handled carefully, in the latests revisions of the portal it's pretty stable, however it has passed in the past that configurations done in the web configuration frontend are not saved to the xml configuration files, so double check is highly recommended, specially in case of failures or problems.
+
+The xml file that's interesting for us is \textit{~/guse/apache-tomcat-6.0.36/webapps/dci\_bridge\_service/WEB-INF/dci-bridge.xml}, this file contains the actual description of each DCI submission service. We can modified it manually and sometimes has been required to do it. Whenever there is a suspicion about DCI misconfiguration, first thing to do is compare this file to what the web frontend is showing us, send it to the portal developers always help to identify problems.
+
+\subsection{GT2}
+GT2 services in the SHIWA portal must be configured as follows:
+
+For ngs:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	GT2 grid name &uk-ngs-gt2\\
+	IS &ngsinfo.grid-support.ac.uk:2135:mds-vo-name=ngsinfo,o=grid\\
+	IS type &ldap-BDII
+\end{tabular}
+\end{table}
+
+The mark ``This service running'' must be set on, so is written ``true'' on it's left.
+For seegridgt2:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	GT2 grid name &seegridgt2\\
+	IS &bdii.ipb.ac.rs:2170:mds-vo-name=local,o=grid\\
+	IS type &ldap-BDII
+\end{tabular}{ll}
+\end{table}
+
+The mark ``This service running'' must be set on, so is written ``true'' on it's left.
+\subsection{GT4}
+GT4 services in the SHIWA portal must be configured as follows:
+
+For ngs:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	GT2 grid name &uk-ngs-gt4\\
+	IS &ngsinfo.grid-support.ac.uk:2135:mds-vo-name=ngsinfo,o=grid\\
+	IS type &ldap-BDII
+\end{tabular}
+\end{table}
+
+The mark ``This service running'' must be set on, so is written ``true'' on it's left.
+For westfocus:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	GT2 grid name &WestFocus\\
+	IS &bdii.ngs.ac.uk:2170:mds-vo-name=local,o=grid\\
+	IS type &ldap-BDII
+\end{tabular}
+\end{table}
+
+\subsection{Local submission}
+This service MUST be DISABLE, is huge security hole to have it activated, in can lead very very easily in remote execution code.
+
+\subsection{Glite}
+Apart from installing and configuring the Glite middleware we have to configure it in the DCI bridge too. The conf for the VOs is as follows:
+
+For voce:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &voce\\
+	gLite IS &bdii.cyf-kr.edu.pl:2170:mds-vo-name=local,o=grid\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &bdii.cyf-kr.edu.pl\\
+	gLite WMS &https://wms.ui.savba.sk:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &skurut2.cesnet.cz\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For seegrid:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &seegrid\\
+	gLite IS &bdii.ipb.ac.rs:2170:mds-vo-name=local,o=grid\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &bdii.ipb.ac.rs\\
+	gLite WMS &https://wms.ipb.ac.rs:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &grid02.rcub.bg.ac.rs\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For gilda:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &gilda\\
+	gLite IS &gilda-bdii.ct.infn.it:2170:mds-vo-name=local,o=grid\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &gilda-bdii.ct.infn.it\\
+	gLite WMS &https://gilda-wms-01.ct.infn.it:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &lfc-gilda.ct.infn.it\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For hungrid:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &hungrid\\
+	gLite IS &grid152.kfki.hu:2170:mds-vo-name=local,o=grid\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &grid152.kfki.hu\\
+	gLite WMS &https://grid150.kfki.hu:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &grid155.kfki.hu\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For vlemed:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &vlemed\\
+	gLite IS & bdii.grid.sara.nl:2170:mds-vo-name=local,o=grid\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &bdii.grid.sara.nl:2170\\
+	gLite WMS &https://wms1.grid.sara.nl:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &lfc.grid.sara.nl\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For shiwa-workflow.eu:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &shiwa-workflow.eu\\
+	gLite IS &cclcgtopbdii02.in2p3.fr\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &cclcgtopbdii02.in2p3.fr\\
+	gLite WMS &https://marwms.in2p3.fr:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &lfc-egee.in2p3.fr\\
+\end{tabular}
+\end{table}
+
+The rest of the options can be left as default.
+
+For astro.vo.eu-egee.org:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &astro.vo.eu-egee.org\\
+	gLite IS &egee-bdii.cnaf.infn.it:2170\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &egee-bdii.cnaf.infn.it:2170\\
+	gLite WMS &https://grid07.lal.in2p3.fr:7443/glite\_wms\_wmproxy\_server\\
+	gLite LFC &lfc.grif.fr\\
+\end{tabular}
+\end{table}
+
+For plank:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &plank\\
+	gLite IS &egee-bdii.cnaf.infn.it:2170\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &egee-bdii.cnaf.infn.it:2170\\
+	gLite WMS &https://wms-multi.grid.cnaf.infn.it:7443\\
+	gLite LFC &lfcserver.cnaf.infn.it\\
+\end{tabular}
+\end{table}
+
+For inaf:
+The mark ``Status'' must be set on.
+
+\begin{table}[H]
+\begin{tabular}{ll}
+	gLite VO name &inaf\\
+	gLite IS &egee-bdii.cnaf.infn.it:2170\\
+	gLite IS type &ldap-BDII\\
+	gLite BDII &egee-bdii.cnaf.infn.it:2170\\
+	gLite WMS &https://wms-multi.grid.cnaf.infn.it:7443\\
+	gLite LFC &lfcserver.cnaf.infn.it\\
+\end{tabular}
+\end{table}
+
+
+The rest of the options can be left as default.
+
+FIXIT:
+Please note that at the time to write this manual, some of the Glite submission services where in testing phase, not 100\% working.
+
+\subsection{GEMLCA}
+Gemlca is an special service, it runs in a different DCI bridge, in a different tomcat. The only we have to do is point it ti the correct URL of the other DCI bridge service and unmark the ``This service running'' tag. This procedure is now well documented in the official GEMLCA manual, so please follow it.
+
+The UoW GEMLCA resources configuration is as follows on the guse DCI bridge:
+
+\begin{table}[ht]
+\begin{tabular}{ll}
+	Gelmca service &gemlca-resource.cpc.wmin.ac.uk:8443\\
+	This service running & false\\
+	WSDL of the other service  &http://localhost:6080/dci\_bridge\_service/BESFactoryService?wsdl\\
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ll}
+	Gelmca service &gemlca-devel.cpc.wmin.ac.uk:8443\\
+	This service running & false\\
+	WSDL of the other service  &http://localhost:6080/dci\_bridge\_service/BESFactoryService?wsdl\\
+\end{tabular}
+\end{table}
+
+And on the GEMLCA DCI bridge we do the same but activating the service locally instead communicating with a second DCI bridge:
+
+\begin{table}[ht]
+\begin{tabular}{ll}
+	Gelmca service &gemlca-resource.cpc.wmin.ac.uk:8443\\
+	This service running & true\\
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{ll}
+	Gelmca service &gemlca-devel.cpc.wmin.ac.uk:8443\\
+	This service running & true\\
+\end{tabular}
+\end{table}\section{GEMLCA}
+
+Apart from that just ensure that the plugin is enabled in both DCI bridges.
+\section{GEMLCA}
+In the past this was a quite tricky phase of the installation, nowadays, the official documentation covers most aspects of the process.
+
+Is important to have in mind that this is a separated tomcat that is going to communicate by itself with the GEMLCA resources, it has its own logs and they must be watched out when there is any problem.
+
+Apart from the ~/.guserc , there is another file that we have to modify in order to configure the java variables, this is very important and is not written in the manual, the file is located in \textit{~/tomcat-gemlca/globusgemlca/etc/gemlca-init-env.sh} and in there we can set the java\_ops and we MUST set the Globus port range, the one used at UoW, so ensure the file looks like:
+
+\scriptsize
+\begin{verbatim}
+#!/bin/sh
+# Don't forget to update the GLOBUS\_LOCATION variable at the beginning
+# execute it like this:
+# . gemlca-init-env.sh
+#export GLOBUS_LOCATION=\ldots/globusgemlca
+. $GLOBUS_LOCATION/etc/globus-devel-env.sh
+export CLASSPATH=$GLOBUS\_LOCATION:$CLASSPATH
+export JAVA_OPTS=``-DGLOBUS\_LOCATION=$GLOBUS\_LOCATION -DGLOBUS\_TCP\_PORT\_RANGE=3000,3600''
+alias gemlcacli=``java -DGLOBUS\_LOCATION=$GLOBUS_LOCATION uk.ac.wmin.cpc.gemlca.client.GemlcaClient''
+\end{verbatim}
+\normalsize
+
+\section{SSL security layer}
+\subsection{Pound reverse proxy}
+\label{sec:Pound}
+The ssl security layer for https is provided by a reverse proxy software called ``pound'', it must be installed and configured, the configuration is in the files \textit{/etc/pound.cfg} and \textit{pound\_ext.cfg}, the first one, includes or excludes the second one, in the first one, the normal users permitted URLs are allowed, in the second one, the system administration URLs, such as \textit{/information/} or \textit{/manager} are allowed. The policy is to comment the administration file during regular operation of the portal and uncomment it during administration operations. Each time you comment/uncomment it, you have to restart the service by typing as root:
+\scriptsize
+\begin{verbatim}
+service pound restart
+\end{verbatim}
+\normalsize
+
+The configuration files contain the following:
+pound.cfg:
+\scriptsize
+\begin{verbatim}
+User            "pound"
+Group           "pound"
+## Logging: (goes to syslog by default)
+##      0       no logging
+##      1       normal
+##      2       extended
+##      3       Apache-style (common log format)
+LogLevel        1
+
+## check backend every X secs:
+Alive           30
+TimeOut         300
+## use hardware-accelleration card supported by openssl(1):
+#SSLEngine      "<hw>"
+
+# poundctl control socket
+Control "/var/run/pound/poundctl.socket"
+
+ListenHTTPs
+        Address 10.0.4.22
+        Port    443
+        Cert    "/etc/ssl/shiwa-portal2.pem"
+	CAList  "/etc/ssl/TERENASSLCA.crt"
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+
+#Include "/etc/pound_ext.cfg"
+
+       Service
+        	URL "/liferay-portal-6.1.0"
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+	 Service
+        	URL "/wspgrade/"
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+	 Service
+        	URL "/wfs/"
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+End
+ListenHTTPs
+        Address 161.74.11.130
+        Port    443
+        Cert    "/etc/ssl/shiwa-portal2.pem"
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+
+        Service
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+End
+ListenHTTPs
+        Address 127.0.0.1
+        Port    443
+        Cert    "/etc/ssl/shiwa-portal2.pem"
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+
+        Service
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+End
+ListenHTTP
+        Address 161.74.11.130
+        Port    80
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+
+        Service
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+End
+ListenHTTP
+        Address 127.0.0.1
+        Port    80 
+        ## allow PUT and DELETE also (by default only GET, POST and HEAD)?:
+        xHTTP           0
+
+        Service
+	        BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+End
+\end{verbatim}
+\normalsize
+pound\_ext.cfg:
+\scriptsize
+\begin{verbatim}
+        Service
+        URL "/information"
+                BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+               End
+       End
+        Service
+        URL "/stataggregator"
+                BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+               End
+       End
+        Service
+                URL "/manager"
+                BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+               End
+       End
+       Service
+                URL "/dci_bridge_service/"
+                BackEnd
+                        Address 127.0.0.1
+                        Port    8080
+                End
+        End
+\end{verbatim}
+Please note that the system user ``pound'' must exist or be created.
+
+\normalsize
+As you see, the configuration is not trivial, it uses the internal ``natted'' ip in some cases and the public ip in other cases, this is necessary for the correct functionality of the portal, it took lot of trial and error to find the proper configuration to acomplish with all the security meassures required by the portal.
+\subsection{Portal https configuration}
+In order to make the portal work with https we have to configure the Liferay and the Guse internal services, the Guse internal services are described in the configuration section ~\ref{sec:Configuration}. The Liferay portal must be configured by editing or creating the file \textit{~/guse/apache-tomcat-6.0.36/webapps/liferay-portal-6.1.0/WEB-INF/classes/portal-ext.properties} relative to the guse user home dir, this file must contain the following:
+\scriptsize
+\begin{verbatim}
+web.server.protocol=https
+web.server.host=shiwa-portal2.cpc.wmin.ac.uk
+web.server.https.port=443
+\end{verbatim}
+\normalsize
+In which the second line must match the full qualified domain name of the machine.
+
+The portal must be restart after applying this configuration file, and once done, then you can only authenticate by using https and not in the port 8080 anymore. All the operations must be done under https for correct functionality of the portal, even the Guse initialization.
+\section{Firewalling}
+There are 3 firewall layers in the UoW cloud platform, one is managed by the cloud administrator via the cloud web frontend in the security section, other is managed by the cloud system administrator in the standalone cloud front firewall and the 3rd is managed by the central IT services at the University in the central University firewall.
+
+Each layer is very restrictive and the 3rd one carries also lots of bureaucracy, each firewall rule can only be requested by authorized people and is not a trivial process, each request must be accompanied by a description of the required rule and an explanation of the service that will be carried on such port/ports.
+
+The Guse portal have quite a lot of firewall requirements, the next chart describes some of them but they change dynamically as they are dependent on external hosts and new services are added to the portal eventually.
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{llll}
+	Protocol &from port &to port &CDIR\\
+	TCP &22		&22	&0.0.0.0/0\\	
+	TCP &443	&443	&0.0.0.0/0\\	
+	TCP &3000	&3600	&0.0.0.0/0\\	
+	TCP &1194	&1194	&0.0.0.0/0\\	
+	TCP &8443	&8443	&0.0.0.0/0\\	
+	TCP &2811	&2811	&0.0.0.0/0\\
+\end{tabular}
+\end{center}
+\end{table}
+These are incoming rules, the services that need to communicate with the portal must be able (by outgoing rules) to reach these ports. The outgoing rules from the portal to the internet depend on the number of services configured, they are specific to each specific service in each specific host, you can identify them on the configuration of each specific service or by trying to reach it and looking in the firewall logs if you have administrative privileges.
+
+At the moment, the following outgoing rules are provided to the portal:
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{llll}
+	Protocol &from port &to port &CDIR\\
+	TCP &25		&25	&161.74.10.20, 161.74.91.25\\	
+	TCP &30030	&30030	&145.100.13.52\\	
+	TCP &443	&443	&0.0.0.0/0\\	
+	TCP &3000	&3600	&0.0.0.0/0\\	
+	TCP &2119	&2119	&0.0.0.0/0\\	
+	TCP &1194	&1194	&0.0.0.0/0\\	
+	TCP &2811	&2811	&0.0.0.0/0\\
+	TCP &2170	&2170	&0.0.0.0/0\\
+	TCP &5001	&5001	&0.0.0.0/0\\
+	TCP &5010	&5010	&0.0.0.0/0\\
+	TCP &5015	&5015	&0.0.0.0/0\\
+	TCP &7512	&7512	&0.0.0.0/0\\
+	TCP &8080	&8080	&0.0.0.0/0\\
+	TCP &8085	&8085	&0.0.0.0/0\\
+	TCP &8443	&8444	&0.0.0.0/0\\	
+	TCP &8446	&8446	&0.0.0.0/0\\
+	TCP &9091	&9091	&0.0.0.0/0\\
+	TCP &9618	&9618	&0.0.0.0/0\\
+	TCP &7443	&7443	&0.0.0.0/0\\
+	TCP &9000	&9003	&0.0.0.0/0\\
+\end{tabular}
+\end{center}
+\end{table}
+Most of these rules are for Glite and Globus services access.
+
+Apart from all the described rules, is always necessary to keep an eye in all the firewalls logs in order to avoid possible new conflicts, the experience tell us that every new deployment requires new firewall rules, however, it is true that nowadays most of the requirements are covered and the are not too many new possible services to add as there were before.
+
+\section{Shiwa Repository}
+Apart from the steps said in the GEMLCA manual about the Shiwa Repository integration, we have to patch the liferay portal in order to work properly with iframes and POST info passing, the issue causing the problem can be fount in \url{http://issues.liferay.com/browse/LPS-25522}, but the fix was only released in the next liferay version, which is not compatible with the GUSE portal. So the iframe portlet was modified and recompiled by UoW, it can be downloaded from \url{https://github.com/WCMinor/foo/blob/master/iframe-ext-6.2.0.1.war?raw=true}, it must be installed as a plugin using the plugins installation tool in the liferay control panel.
+\end{document}

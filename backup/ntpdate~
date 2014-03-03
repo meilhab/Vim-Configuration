@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ntpdate ntp0.wmin.ac.uk > /dev/null

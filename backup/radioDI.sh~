@@ -1,0 +1,67 @@
+#!/bin/bash
+
+STARTURL=http://listen.di.fm/public2/
+ClubDubstep=${STARTURL}clubdubstep.pls
+DeepHouse=${STARTURL}deephouse.pls
+DrumNBass=${STARTURL}drumandbass.pls
+Dubstep=${STARTURL}dubstep.pls
+ElectroHouse=${STARTURL}electrohouse.pls
+House=${STARTURL}house.pls
+LiquidDnB=${STARTURL}liquiddnb.pls
+LiquidDubStep=${STARTURL}liquiddubstep.pls
+TechHouse=${STARTURL}techhouse.pls
+
+echo "Here the choice"
+echo "1 - Club Dubstep"
+echo "2 - Deep House"
+echo "3 - Drum and Bass"
+echo "4 - Dubstep"
+echo "5 - Electro House"
+echo "6 - House"
+echo "7 - Liquid DnB"
+echo "8 - Liquid Dubstep"
+echo "9 - Tech House"
+echo "##################"
+echo "Enter the radio number (default Dubstep)"
+echo -n "->"
+
+read choice
+
+radio=$Dubstep
+echo
+case $choice in
+	1)radio=$ClubDubstep
+	echo "Club Dubstep radio chosen"
+	;;
+	2)radio=$DeepHouse
+	echo "Deep House radio chosen"
+	;;
+	3)radio=$DrumNBass
+	echo "Drum and Bass radio chosen"
+	;;
+	4)radio=$Dubstep
+	echo "Dubstep radio chosen"
+	;;
+	5)radio=$ElectroHouse
+	echo "Electro House radio chosen"
+	;;
+	6)radio=$House
+	echo "House radio chosen"
+	;;
+	7)radio=$LiquidDnB
+	echo "Liquid DnB radio chosen"
+	;;
+	8)radio=$LiquidDubStep
+	echo "Liquid Dubstep radio chosen"
+	;;
+	9)radio=$TechHouse
+	echo "Tech House radio chosen"
+	;;
+	*) echo "Default radio chosen"
+	;;
+esac
+echo
+
+mplayer -playlist $radio
+
+exit 0

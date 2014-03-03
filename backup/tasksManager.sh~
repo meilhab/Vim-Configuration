@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+function actualizeDisplay 
+{
+	clear
+	task list
+    echo "Running under PID: $$"
+	echo "Actualized: " `date +%X`
+}
+
+function killProcess
+{
+	echo "kill process: $$"
+    trap - SIGTSTP SIGINT
+	exit
+}
+
+trap 'killProcess' SIGTSTP
+trap 'actualizeDisplay' SIGINT
+
+function loopDisplay
+{
+	while true; do
+			actualizeDisplay
+			sleep 60
+	done
+}
+
+loopDisplay

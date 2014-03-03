@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        *** GENERATED FROM jax-ws.xml - DO NOT EDIT !                             ***
+        *** TO MODIFY wsimport options USE Web Service node -> Edit WS Attributes ***
+        *** TO CHANGE TARGETS GENERATED TO jaxws-build.xml COPY THOSE             ***
+        *** TARGETS TO ../build.xml AND MODIFY THAT FILE INSTEAD                  ***
+
+        -->
+<project xmlns:xalan="http://xml.apache.org/xslt" xmlns:webproject2="http://www.netbeans.org/ns/web-project/2" xmlns:jaxws="http://www.netbeans.org/ns/jax-ws/1">
+    <!--
+                ===================
+                JAX-WS WSGEN SECTION
+                ===================
+            -->
+    <target name="wsgen-init" depends="init, -do-compile">
+        <mkdir dir="${build.generated.sources.dir}/jax-ws/resources/"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <property name="j2ee.platform.wsgen.classpath" value="${libs.jaxws21.classpath}"/>
+        <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
+            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="wsgen-ResourceConfiguration" depends="wsgen-init">
+        <copy todir="${build.classes.dir}/META-INF">
+            <fileset dir="${webinf.dir}" includes="wsit-hu.sztaki.lpds.dcibridge.config.ResourceConfiguration.xml"/>
+        </copy>
+        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" xendorsed="true" keep="true" genwsdl="true" sei="hu.sztaki.lpds.dcibridge.config.ResourceConfiguration">
+            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
+        </wsgen>
+    </target>
+    <!--
+                ===================
+                JAX-WS WSIMPORT SECTION
+                ===================
+            -->
+    <target name="wsimport-init" depends="init">
+        <fail if="${wsimport.bad.version}" message="WsImport ant task defined in the classpath ${j2ee.platform.wsimport.classpath} has a serious bug. See http://wiki.netbeans.org/MetroIssue for details."/>
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <property name="j2ee.platform.wsimport.classpath" value="${libs.jaxws21.classpath}"/>
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath path="${java.home}/../lib/tools.jar:${j2ee.platform.wsimport.classpath}:${javac.classpath}"/>
+        </taskdef>
+        <condition property="conf-dir" value="${conf.dir}/" else="">
+            <isset property="conf.dir"/>
+        </condition>
+    </target>
+    <target name="wsimport-client-MBService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/MBService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/MBService" destdir="${build.generated.dir}/jax-wsCache/MBService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/MBService/wsdl/n55.hpcc.sztaki.hu_8080/MBService/MBService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://n55.hpcc.sztaki.hu:8080/MBService/MBService?wsdl" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/MBService/wsdl/n55.hpcc.sztaki.hu_8080/MBService/MBService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/MBService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/MBService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-MBService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/server"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/MBService"/>
+    </target>
+    <target name="wsimport-client-3GBridgeSubmitter" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter" destdir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/3GBridgeSubmitter/wsdl/edges-3g-bridge.svn.sourceforge.net/viewvc/edges-3g-bridge/3g-bridge/trunk/3GBridgeSubmitter.wsdl.revision_2574.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://edges-3g-bridge.svn.sourceforge.net/viewvc/edges-3g-bridge/3g-bridge/trunk/3GBridgeSubmitter.wsdl?revision=2574" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/3GBridgeSubmitter/wsdl/edges-3g-bridge.svn.sourceforge.net/viewvc/edges-3g-bridge/3g-bridge/trunk/3GBridgeSubmitter.wsdl.revision_2574.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-3GBridgeSubmitter" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/eu/edges-grid/wsdl/3gbridge/wsdl"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/3GBridgeSubmitter"/>
+    </target>
+    <target name="wsimport-client-CredentialProvider" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/CredentialProvider"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/CredentialProvider" destdir="${build.generated.dir}/jax-wsCache/CredentialProvider" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/CredentialProvider/wsdl/localhost_8080/wspgrade/CredentialProvider.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/wspgrade/CredentialProvider?wsdl" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/CredentialProvider/wsdl/localhost_8080/wspgrade/CredentialProvider.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/CredentialProvider"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/CredentialProvider">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-CredentialProvider" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/hu/sztaki/lpds/pgportal/services/credential"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/CredentialProvider"/>
+    </target>
+    <target name="wsimport-client-JobStatusService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/JobStatusService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/JobStatusService" destdir="${build.generated.dir}/jax-wsCache/JobStatusService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/JobStatusService/wsdl/localhost_8084/wfi/JobStatusService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8084/wfi/JobStatusService?wsdl" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/JobStatusService/wsdl/localhost_8084/wfi/JobStatusService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/JobStatusService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/JobStatusService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-JobStatusService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/hu/sztaki/lpds/wfi/net/wsaxis13/zen"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/JobStatusService"/>
+    </target>
+    <target name="wsimport-service-BesService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/service/BesService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/service/BesService" destdir="${build.generated.dir}/jax-wsCache/service/BesService" wsdl="${basedir}/${conf-dir}xml-resources/web-services/BesService/wsdl/schemas.ogf.org/bes/2006/08/bes-factoryWrapper.wsdl" catalog="catalog.xml" extension="true" verbose="true" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-services/BesService/wsdl/schemas.ogf.org/bes/2006/08/bes-factoryWrapper.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/service/BesService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/service/BesService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.web.dir}/WEB-INF/wsdl/BesService">
+            <fileset dir="${basedir}/${conf-dir}xml-resources/web-services/BesService/wsdl/"/>
+        </copy>
+    </target>
+    <target name="wsimport-service-clean-BesService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/org/ggf/schemas/bes/_2006/_08/bes_factory"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/service/BesService"/>
+    </target>
+    <target name="wsimport-service-ServiceInformationImpl" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl" destdir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl" wsdl="${basedir}/${conf-dir}xml-resources/web-services/ServiceInformationImpl/wsdl/guse.hu/storage/services/monitoring/w3.wsdl" catalog="catalog.xml" extension="true" verbose="true" xnocompile="true">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-services/ServiceInformationImpl/wsdl/guse.hu/storage/services/monitoring/w3.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${build.web.dir}/WEB-INF/wsdl/ServiceInformationImpl">
+            <fileset dir="${basedir}/${conf-dir}xml-resources/web-services/ServiceInformationImpl/wsdl/"/>
+        </copy>
+    </target>
+    <target name="wsimport-service-clean-ServiceInformationImpl" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/hu/sztaki/lpds/service"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/service/ServiceInformationImpl"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-MBService, wsimport-client-3GBridgeSubmitter, wsimport-client-CredentialProvider, wsimport-client-JobStatusService"/>
+    <target name="wsimport-service-generate" depends="wsimport-service-BesService, wsimport-service-ServiceInformationImpl, wsimport-init"/>
+</project>

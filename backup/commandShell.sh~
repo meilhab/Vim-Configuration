@@ -1,0 +1,6 @@
+#!/bin/bash
+
+touch toto
+ls -lrt
+
+exit 0

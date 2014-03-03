@@ -1,0 +1,33 @@
+ClientSearchAPI way to work:
+
+Basically I tried to stay as closed as I could of the GEMLCA Client interface but there will be minor modification.
+Important: the way the information are manipulated and used to build the JSDL for a current GEMLCA workflow should be changed when integrating the submission service.
+
+initialization:
+- url of the submission service: https://submission.cpc.wmin.ac.uk:8181/SubmissionService
+- url of the repository: can be null, in that case it means http://shiwa-repo.cpc.wmin.ac.uk:8080/shiwa-repo
+Note that actually, only the development SHIWA Repository is in used. The url could be slightly different when moving to the production SHIWA Repository.
+
+functions:
+- ImplShort getLCIDs() throws Exception;
+- String[] getExecutorSites(String lcid) throws Exception;
+- Parameter[] getLCParameters(String lcid) throws Exception;
+
+
+getLCIDs:
+This function needs to set up an extServiceId and extUserId using the getters availables.
+It lists all publicly available and supposed configured workflows existing in the selected repository.
+It replaces what is actually used in the Portal to get a list of all workflows in the SHIWA Repository and GEMLCA Repository.
+Besides, it indicates when a workflow from the SHIWA Repository has been selected through the Portal.
+The object ImplShort contains:
+- String name: name of the workflow;
+- String description: description of the workflow;
+- boolean selected: if the workflow has been selected using the Portal.
+
+getExecutorSites:
+This function lists all available sites for a given workflow.
+The difference with the function used in GEMLCA is that this one is using less parameters.
+
+getLCParameters:
+List all parameters for a given workflow.
+This function returns exactly the same information that the GEMLCA API related function does.

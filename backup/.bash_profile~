@@ -1,0 +1,6 @@
+export JAVA_HOME=/usr/lib/jvm/jdk1.6.0_43
+export PATH=$PATH:.
+export PATH=$PATH:bin/
+export ARGOUML_PATH=$HOME/argouml-0.34
+export GLOBUS_LOCATION=$HOME/gsissh
+. $GLOBUS_LOCATION/etc/globus-user-env.sh

@@ -1,0 +1,298 @@
+DROP DATABASE IF EXISTS `yuukou_db`;
+CREATE DATABASE `yuukou_db`;
+USE `yuukou_db`;
+
+DROP TABLE IF EXISTS `yuukou_users`;
+CREATE TABLE `yuukou_users` (
+  `id_user` varchar(25) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `firstname` varchar(50) NOT NULL,
+  `user_type` varchar(25) NOT NULL,
+  `last_time_seen` datetime DEFAULT NULL,
+  `image` varchar(100) DEFAULT NULL,
+  `user_school_member` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_software`;
+CREATE TABLE `yuukou_software` (
+  `id_software` varchar(250) NOT NULL,
+  `description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id_software`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_mapping_location`;
+CREATE TABLE `yuukou_mapping_location` (
+  `id_ml` varchar(2) NOT NULL,
+  `short_location` varchar(5) NOT NULL,
+  `long_location` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id_ml`),
+  KEY (`short_location`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_mapping_room`;
+CREATE TABLE `yuukou_mapping_room` (
+  `yuukou_code` varchar(25) NOT NULL,
+  `sits_room_code` varchar(25) DEFAULT NULL,
+  `estates_room_code` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`yuukou_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_rooms`;
+CREATE TABLE `yuukou_rooms` (
+  `id_room` varchar(25) NOT NULL,
+  `fullname` varchar(25) NOT NULL,
+  `location` varchar(5) NOT NULL,
+  `type_resources` varchar(3) NOT NULL,
+  `start_resource` varchar(25) NOT NULL,
+  `quantity` int(10) unsigned NOT NULL,
+  `sub_network` varchar(15) DEFAULT '0.0.0.0',
+  `has_projector` enum('Y','N') NOT NULL DEFAULT 'N',
+  `vlan_id` varchar(10) DEFAULT NULL,
+  `path_img` varchar(250) DEFAULT NULL,
+  `restriction` varchar(250) DEFAULT NULL,
+  `url` varchar(250) DEFAULT NULL,
+  `display` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id_room`),
+  FOREIGN KEY (`location`) REFERENCES `yuukou_mapping_location` (`short_location`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_resources`;
+CREATE TABLE `yuukou_resources` (
+  `id_resource` varchar(25) NOT NULL,
+  `status` enum('OK','DOWN','DELETEME') NOT NULL DEFAULT 'DOWN',
+  `ip` varchar(15) NOT NULL,
+  `domain_name` varchar(50) DEFAULT NULL,
+  `last_time_seen` datetime DEFAULT NULL,
+  `id_room` varchar(25) NOT NULL,
+  PRIMARY KEY (`id_resource`),
+  FOREIGN KEY (`id_room`) REFERENCES `yuukou_rooms` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_groups`;
+CREATE TABLE `yuukou_groups` (
+  `id_group` varchar(250) NOT NULL,
+  `description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id_group`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_groups_software`;
+CREATE TABLE `yuukou_groups_software` (
+  `id_gs` varchar(10) NOT NULL,
+  `id_group` varchar(250) NOT NULL,
+  `id_software` varchar(250) NOT NULL,
+  PRIMARY KEY (`id_gs`),
+  FOREIGN KEY  (`id_group`) REFERENCES `yuukou_groups` (`id_group`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_software`) REFERENCES `yuukou_software` (`id_software`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last`;
+CREATE TABLE `yuukou_last` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201203`;
+CREATE TABLE `yuukou_last_201203` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201204`;
+CREATE TABLE `yuukou_last_201204` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201205`;
+CREATE TABLE `yuukou_last_201205` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201206`;
+CREATE TABLE `yuukou_last_201206` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201207`;
+CREATE TABLE `yuukou_last_201207` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201208`;
+CREATE TABLE `yuukou_last_201208` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_last_201209`;
+CREATE TABLE `yuukou_last_201209` (
+  `id_last` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  `end_time_session` datetime NOT NULL,
+  `state` varchar(25) DEFAULT NULL,
+  PRIMARY KEY (`id_last`),
+  FOREIGN KEY  (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY  (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `yuukou_rooms_groups`;
+CREATE TABLE `yuukou_rooms_groups` (
+  `id_rg` varchar(10) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `id_group` varchar(250) NOT NULL,
+  PRIMARY KEY (`id_rg`),
+  FOREIGN KEY (`id_room`) REFERENCES `yuukou_rooms` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`id_group`) REFERENCES `yuukou_groups` (`id_group`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_rooms_software`;
+CREATE TABLE `yuukou_rooms_software` (
+  `id_rs` varchar(10) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `id_software` varchar(250) NOT NULL,
+  PRIMARY KEY (`id_rs`),
+  FOREIGN KEY (`id_room`) REFERENCES `yuukou_rooms` (`id_room`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`id_software`) REFERENCES `yuukou_software` (`id_software`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_settings`;
+CREATE TABLE `yuukou_settings` (
+  `id_settings` varchar(25) NOT NULL,
+  `value_settings` varchar(50) NOT NULL,
+  `description_settings` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id_settings`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_timetables`;
+CREATE TABLE `yuukou_timetables` (
+  `event_code` varchar(25) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `event_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `location_code` varchar(50) DEFAULT NULL,
+  `location_name` varchar(50) DEFAULT NULL,
+  `module_code` varchar(50) DEFAULT NULL,
+  `module_name` varchar(50) DEFAULT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`event_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_timetables_201207`;
+CREATE TABLE `yuukou_timetables_201207` (
+  `event_code` varchar(25) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `event_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `location_code` varchar(50) DEFAULT NULL,
+  `location_name` varchar(50) DEFAULT NULL,
+  `module_code` varchar(50) DEFAULT NULL,
+  `module_name` varchar(50) DEFAULT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`event_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_timetables_201208`;
+CREATE TABLE `yuukou_timetables_201208` (
+  `event_code` varchar(25) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `event_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `location_code` varchar(50) DEFAULT NULL,
+  `location_name` varchar(50) DEFAULT NULL,
+  `module_code` varchar(50) DEFAULT NULL,
+  `module_name` varchar(50) DEFAULT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`event_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `yuukou_timetables_201209`;
+CREATE TABLE `yuukou_timetables_201209` (
+  `event_code` varchar(25) NOT NULL,
+  `id_room` varchar(25) NOT NULL,
+  `event_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `location_code` varchar(50) DEFAULT NULL,
+  `location_name` varchar(50) DEFAULT NULL,
+  `module_code` varchar(50) DEFAULT NULL,
+  `module_name` varchar(50) DEFAULT NULL,
+  `event_type` varchar(50) DEFAULT NULL,
+  `event_description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`event_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `yuukou_who`;
+CREATE TABLE `yuukou_who` (
+  `id_who` varchar(25) NOT NULL,
+  `id_resource` varchar(25) NOT NULL,
+  `id_user` varchar(25) NOT NULL,
+  `start_time_session` datetime NOT NULL,
+  PRIMARY KEY (`id_who`),
+  FOREIGN KEY (`id_resource`) REFERENCES `yuukou_resources` (`id_resource`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`id_user`) REFERENCES `yuukou_users` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

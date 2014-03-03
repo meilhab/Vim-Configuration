@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# fixed outputs
+echo "Report outputs" > stdout.txt
+echo "Report errors" > stderr.txt
+
+echo "Command received:" | tee -a stdout.txt
+echo "./$0 $@" | tee -a stdout.txt
+
+if [ $# -lt 2 ]; then
+	echo "number of parameters incorrect, minimum 2 required" | tee -a stderr.txt
+	exit 10
+fi
+
+echo "Checking parameters..." | tee -a stdout.txt
+# not really useful...
+if [ -z "$1" ]; then
+	echo "empty param detected" | tee -a stderr.txt
+	exit 11
+fi
+
+if [ -z "$2" ]; then
+	echo "empty param detected" | tee -a stderr.txt
+	exit 12
+fi
+
+if [ ! -s "textInput.txt" ]; then
+	echo "file (textInput.txt) does not exist or is empty" | tee -a stderr.txt
+	exit 13
+fi
+
+echo "DONE" | tee -a stdout.txt
+
+FILE_NAME="$1"
+FIXED_STRING=$2
+
+FILE_NAME="$FILE_NAME-$FIXED_STRING"
+CONTENTS="file 1:"`cat textInput.txt`
+shift 2
+
+OUTPUT_CONTENTS=""
+RENAME_OUTPUT_FILE=""
+echo "Options management" | tee -a stdout.txt
+while getopts "d:p:f:c:o:" opt; do
+	case $opt in
+		d)
+			# -d fixedContentFile
+			echo "option -d selected, Parameter: $OPTARG" | tee -a stdout.txt
+			if [ ! -s "$OPTARG" ]; then
+				echo "file ($OPTARG) does not exist or is empty" | tee -a stderr.txt
+				exit 14
+			fi
+			CONTENTS="$CONTENTS \nfile 2: "`cat $OPTARG`
+		;;
+		p)
+			# -p firstnameString
+			echo "option -p selected, Parameter: $OPTARG" | tee -a stdout.txt
+			FILE_NAME="$FILE_NAME-$OPTARG"
+		;;
+		f)
+			# -f contentFile
+			echo "option -f selected, Parameter: $OPTARG" | tee -a stdout.txt
+			if [ ! -s "$OPTARG" ]; then
+				echo "file ($OPTARG) does not exist or is empty" | tee -a stderr.txt
+				exit 15
+			fi
+			CONTENTS="$CONTENTS \nfile 3: "`cat $OPTARG`
+		;;
+		c)
+			# -c outputForContent
+			echo "option -c selected, Parameter: $OPTARG" | tee -a stdout.txt
+			OUTPUT_CONTENTS=$OPTARG
+		;;
+		o)
+			# -o outputNewFile
+			echo "option -o selected, Parameter: $OPTARG" | tee -a stdout.txt
+			RENAME_OUTPUT_FILE=$OPTARG
+		;;
+		\?)
+			echo "Invalid option detected -$OPTARG" | tee -a stderr.txt
+			exit 16
+		;;
+		:)
+			echo "Option -$OPTARG requires an argument" | tee -a stderr.txt
+			exit 17
+		;;
+	esac
+done
+
+# outputs generation
+echo "Generation of outputs" | tee -a stdout.txt
+echo "$FILE_NAME" > outputName.txt
+
+if [ -n "$OUTPUT_CONTENTS" ]; then
+	echo "$CONTENTS" > "$OUTPUT_CONTENTS"
+fi
+
+echo "FINISHED SUCCESSFULLY" | tee -a stdout.txt
+
+if [ -n "$RENAME_OUTPUT_FILE" ]; then
+	echo "stdout file generated renamed to $RENAME_OUTPUT_FILE" | tee -a stdout.txt
+	mv stdout.txt "$RENAME_OUTPUT_FILE"
+fi
+
+exit 0

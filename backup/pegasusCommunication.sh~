@@ -1,0 +1,70 @@
+#!/bin/bash
+
+echo
+echo "SUBMISSION TO PEGASUS"
+echo
+
+USER_NAME=ubuntu
+HOST_NAME=i22.cscloud.cf.ac.uk
+SSH_NAME=$USER_NAME@$HOST_NAME
+TAR_FILE=data.tar
+OUTPUT_TARFILE=outputs.tar
+
+UDID=`basename $PWD`-`date +%s`-$RANDOM
+
+if [ $# -lt 1 ]; then
+	echo "Usage: $0 DAX_FILE ..."
+	exit 1
+fi
+
+if [ ! -f "$1" ]; then
+    echo "Error no workflow file found"
+	exit 1
+fi
+
+DAX_FILE=$1
+shift 1
+
+echo -n "Creating of the remote directory..."
+ssh $SSH_NAME /bin/mkdir $UDID
+if [ "$?" -ne "0" ]; then
+	echo "ERROR"
+	exit 1
+fi
+echo "OK"
+
+echo -n "Creating the tar file..."
+tar -cvf $TAR_FILE * >& /dev/null
+if [ "$?" -ne "0" ]; then
+	echo "ERROR"
+	exit 1
+fi
+echo "OK"
+
+echo -n "Sending tar file..."
+scp $TAR_FILE $SSH_NAME:$UDID >& /dev/null
+if [ "$?" -ne "0" ]; then
+	echo "ERROR"
+	exit 1
+fi
+echo "OK"
+
+echo "Launching submission process..."
+ssh $SSH_NAME /bin/sh carmenCommunication.sh --wd $UDID --tf $TAR_FILE --otf $OUTPUT_TARFILE --dax $DAX_FILE --others $@
+if [ "$?" -ne "0" ]; then
+	echo "ERROR"
+	exit 1
+fi
+echo "OK"
+
+echo
+echo "SUBMISSION TO PEGASUS"
+echo
+
+echo -n "Getting outputs..."
+scp $SSH_NAME:$UDID/$OUTPUT_TARFILE . >& /dev/null
+if [ "$?" -ne "0" ]; then
+	echo "ERROR"
+	exit 1
+fi
+echo "OK"

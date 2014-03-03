@@ -1,0 +1,15 @@
+from pyws.server import SoapServer
+from pyws.functions.register import register
+
+__author__="benoit"
+__date__ ="$13-Feb-2014 12:27:35$"
+
+server = SoapServer(
+    service_name='Test',
+    tns='http://example.com',
+    location='http://localhost:8081/api/'
+)
+
+@register()
+def add_simple(a, b):
+    return a+b

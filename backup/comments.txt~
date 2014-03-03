@@ -1,0 +1,24 @@
+Main ideas
+
+Option 1: table is already existing, you're improving by adding a new way to manage workflow engines (uploading sources, defining if pre-deployed or not, ...), as we discussed.
+
+Option 2: directly merging the idea of workflow engine during the GIB creation, the GIB will manage a workflow engine on one or many sites (if pre-deployed or not)
+
+-------------
+Core features
+
+/!\ you're not playing with GIB in the first option, only the storage of workflow engines
+
+Figure 2 is wrong
+The workflow references a GIB which is referencing a workflow engine
+
+Cons: Complicated management system for the GIB and workflow engine, they have to be managed in two differents entities.
+The option 2 is resuming a way to manage them into 1 entity.
+
+
+------------
+Option 2
+
+
+Figure 3: workflow references GIB which contains Workflow Engine (files or path to a site)
+

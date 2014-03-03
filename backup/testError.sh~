@@ -1,0 +1,9 @@
+#!/bin/bash
+
+ls *.error
+if [ $? -eq 0 ]; then
+	echo "Errors detected"
+	for line in `ls *.error`; do
+		cat $line 1>&2
+	done
+fi

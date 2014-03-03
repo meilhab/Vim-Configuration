@@ -1,0 +1,95 @@
+#!/bin/bash
+
+echo "execution started"
+
+echo "TABLES"
+echo "restore tables started"
+mysql -u root --password='Perfect0' < tablesdump.sql
+echo "restore tables done"
+
+
+echo "DATA"
+echo "yuukou_groups.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_groups.sql
+echo "yuukou_groups.sql done"
+echo "yuukou_mapping_location.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_mapping_location.sql
+echo "yuukou_mapping_location.sql done"
+echo "yuukou_mapping_room.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_mapping_room.sql
+echo "yuukou_mapping_room.sql done"
+echo "yuukou_settings.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_settings.sql
+echo "yuukou_settings.sql done"
+echo "yuukou_software.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_software.sql
+echo "yuukou_software.sql done"
+echo "yuukou_users.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_users.sql
+echo "yuukou_users.sql done"
+
+echo "yuukou_rooms.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_rooms.sql
+echo "yuukou_rooms.sql done"
+echo "yuukou_resources.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_resources.sql
+echo "yuukou_resources.sql done"
+echo "yuukou_timetables.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_timetables.sql
+echo "yuukou_timetables.sql done"
+echo "yuukou_timetables_201207.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_timetables_201207.sql
+echo "yuukou_timetables_201207.sql done"
+echo "yuukou_timetables_201208.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_timetables_201208.sql
+echo "yuukou_timetables_201208.sql done"
+echo "yuukou_timetables_201209.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_timetables_201209.sql
+echo "yuukou_timetables_201209.sql done"
+echo "yuukou_timetables_201210.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_timetables_201210.sql
+echo "yuukou_timetables_201210.sql done"
+
+echo "yuukou_groups_software.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_groups_software.sql
+echo "yuukou_groups_software.sql done"
+echo "yuukou_last.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last.sql
+echo "yuukou_last.sql done"
+echo "yuukou_last_201203.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201203.sql
+echo "yuukou_last_201203.sql done"
+echo "yuukou_last_201204.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201204.sql
+echo "yuukou_last_201204.sql done"
+echo "yuukou_last_201205.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201205.sql
+echo "yuukou_last_201205.sql done"
+echo "yuukou_last_201206.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201206.sql
+echo "yuukou_last_201206.sql done"
+echo "yuukou_last_201207.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201207.sql
+echo "yuukou_last_201207.sql done"
+echo "yuukou_last_201208.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201208.sql
+echo "yuukou_last_201208.sql done"
+echo "yuukou_last_201209.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201209.sql
+echo "yuukou_last_201209.sql done"
+echo "yuukou_last_201210.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_last_201210.sql
+echo "yuukou_last_201210.sql done"
+echo "yuukou_rooms_groups.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_rooms_groups.sql
+echo "yuukou_rooms_groups.sql done"
+echo "yuukou_rooms_software.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_rooms_software.sql
+echo "yuukou_rooms_software.sql done"
+echo "yuukou_who.sql started"
+mysql -u root --password='Perfect0' yuukou_db < dataTables/yuukou_who.sql
+echo "yuukou_who.sql started"
+
+
+
+echo "execution finished"

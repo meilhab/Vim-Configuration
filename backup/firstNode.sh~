@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ls -l
+
+if [ -e $1 ]; then
+	echo "file found"
+	touch tata.txt
+	exit 0
+fi
+
+echo "file not found"
+exit 1

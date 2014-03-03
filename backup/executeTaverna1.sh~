@@ -1,0 +1,37 @@
+#!/bin/bash
+ENGINE_NAME=taverna1.7WorkflowEngine
+MD5SUM=
+echo "Looking for workflow engine files"
+if [ ! -f $ENGINE_NAME".tgz" ]; then
+	echo
+	echo "Workflow engine not found"
+	exit 1
+fi
+
+CURRENT_MD5=`md5sum $ENGINE_NAME.tgz | awk '{ print $1 }'`
+if [ "$MD5SUM" != "$CURRENT_MD5" ]; then
+	echo
+	echo "Workflow engine transfered files incomplete..."
+	echo "Current md5: $CURRENT_MD5 --- Correct md5: $MD5SUM"
+	echo "Maybe a transfer problem, please try again"
+	exit 2
+fi
+
+echo -n "Files extraction..."
+tar xzfv $ENGINE_NAME.tgz
+if [ "$?" != "0" ]; then
+	echo
+	echo "Error detected during extraction of the workflow engine"
+	exit 3
+fi
+echo "Ended"
+
+echo "Taverna 1.7 pre-installed workflow engine ver (10)"
+echo "Running on: "`hostname -f`
+echo "Execution by: "`id`
+echo "Executed command: ./$0 $*"
+export ENGINE_REPO=`pwd`
+echo running $ENGINE_REPO/auto-deploy-taverna/taverna-1.7.2/wfsubmit.sh $*
+$ENGINE_REPO/auto-deploy-taverna/taverna-1.7.2/wfsubmit.sh $*
+echo "Execution finished"
+exit
